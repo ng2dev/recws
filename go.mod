@@ -1,4 +1,4 @@
-module github.com/mariuspass/recws
+module github.com/ng2dev/recws
 
 require (
 	github.com/gorilla/websocket v1.4.0

@@ -265,11 +265,11 @@ func (rc *RecConn) getHandshakeTimeout() time.Duration {
 // the origin (Origin), subprotocols (Sec-WebSocket-Protocol) and cookies
 // (Cookie). Use GetHTTPResponse() method for the response.Header to get
 // the selected subprotocol (Sec-WebSocket-Protocol) and cookies (Set-Cookie).
-func (rc *RecConn) Dial(urlStr string, reqHeader http.Header) {
+func (rc *RecConn) Dial(urlStr string, reqHeader http.Header) error {
 	urlStr, err := rc.parseURL(urlStr)
 
 	if err != nil {
-		log.Fatalf("Dial: %v", err)
+		return err
 	}
 
 	// Config
@@ -287,6 +287,8 @@ func (rc *RecConn) Dial(urlStr string, reqHeader http.Header) {
 
 	// wait on first attempt
 	time.Sleep(rc.getHandshakeTimeout())
+
+	return nil
 }
 
 // GetURL returns current connection url

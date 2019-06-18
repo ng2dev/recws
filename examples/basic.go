@@ -2,17 +2,17 @@ package main
 
 import (
 	"context"
-	"github.com/mariuspass/recws"
+	"github.com/ng2dev/recws"
 	"log"
 	"time"
 )
 
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
-	ws := recws.RecConn{
+	wss := recws.RecConn{
 		KeepAliveTimeout: 10 * time.Second,
 	}
-	ws.Dial("wss://echo.websocket.org", nil)
+	wss.Dial("wss://echo.websocket.org", nil)
 
 	go func() {
 		time.Sleep(2 * time.Second)
@@ -22,23 +22,23 @@ func main() {
 	for {
 		select {
 		case <-ctx.Done():
-			go ws.Close()
-			log.Printf("Websocket closed %s", ws.GetURL())
+			go wss.Close()
+			log.Printf("Websocket closed %s", wss.GetURL())
 			return
 		default:
-			if !ws.IsConnected() {
-				log.Printf("Websocket disconnected %s", ws.GetURL())
+			if !wss.IsConnected() {
+				log.Printf("Websocket disconnected %s", wss.GetURL())
 				continue
 			}
 
-			if err := ws.WriteMessage(1, []byte("Incoming")); err != nil {
-				log.Printf("Error: WriteMessage %s", ws.GetURL())
+			if err := wss.WriteMessage(1, []byte("Incoming")); err != nil {
+				log.Printf("Error: WriteMessage %s", wss.GetURL())
 				return
 			}
 
-			_, message, err := ws.ReadMessage()
+			_, message, err := wss.ReadMessage()
 			if err != nil {
-				log.Printf("Error: ReadMessage %s", ws.GetURL())
+				log.Printf("Error: ReadMessage %s", wss.GetURL())
 				return
 			}
 
